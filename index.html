@@ -271,13 +271,15 @@ function runAwayLoop(){
   }
 }
 
-// Show result on Yes
+// Show result on Yes and hide both buttons
 yesBtn.addEventListener("click", () => {
   result.style.display = "block";
-  yesBtn.disabled = true;
-  yesBtn.style.filter = "brightness(0.92)";
-  yesBtn.style.cursor = "default";
+
+  // ✅ THIS IS THE FIX
+  yesBtn.style.display = "none";
+  noBtn.style.display = "none";
 });
+
 </script>
 
 </body>
