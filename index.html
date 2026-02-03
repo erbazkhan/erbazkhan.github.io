@@ -3,17 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Valentine?</title>
+  <title>Will you be my Valentine?</title>
   <style>
     :root{
       --bg1:#ff4d6d;
-      --bg2:#7b2ff7;
-      --card: rgba(255,255,255,0.14);
-      --card2: rgba(0,0,0,0.14);
-      --text: rgba(255,255,255,0.95);
-      --muted: rgba(255,255,255,0.75);
-      --yes:#22c55e;
-      --no:#ff3b3b;
+      --bg2:#ffb3c1;
+      --card: rgba(255,255,255,0.20);
+      --card2: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.96);
+      --muted: rgba(255,255,255,0.80);
+      --yes:#34d399;
+      --yesText:#06351f;
+      --no:#fb7185;
+      --noText:#3b0a12;
       --shadow: rgba(0,0,0,0.25);
     }
 
@@ -23,372 +25,417 @@
       min-height:100vh;
       display:grid;
       place-items:center;
-      font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       color:var(--text);
-      overflow:hidden;
       background:
-        radial-gradient(900px 500px at 20% 20%, rgba(255,255,255,0.25), transparent 60%),
-        radial-gradient(900px 500px at 80% 70%, rgba(255,255,255,0.18), transparent 60%),
+        radial-gradient(900px 500px at 20% 20%, rgba(255,255,255,0.35) 0%, transparent 60%),
+        radial-gradient(700px 500px at 80% 70%, rgba(255,255,255,0.25) 0%, transparent 55%),
         linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow:hidden;
     }
 
-    /* Floating hearts background */
-    .heart {
-      position: absolute;
-      font-size: 20px;
-      opacity: 0.35;
+    /* floating hearts */
+    .heart{
+      position: fixed;
+      width: 14px; height: 14px;
+      transform: rotate(45deg);
+      opacity: 0.25;
+      pointer-events:none;
       animation: floatUp linear infinite;
-      user-select: none;
-      pointer-events: none;
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.25));
+      background: rgba(255,255,255,0.75);
+      border-radius: 3px;
     }
-    @keyframes floatUp {
-      from { transform: translateY(120vh) rotate(0deg); }
-      to   { transform: translateY(-20vh) rotate(360deg); }
+    .heart:before, .heart:after{
+      content:"";
+      position:absolute;
+      width: 14px; height: 14px;
+      background: rgba(255,255,255,0.75);
+      border-radius: 50%;
+      top:-7px; left:0;
+    }
+    .heart:after{
+      left:-7px; top:0;
+    }
+    @keyframes floatUp{
+      from { transform: translateY(110vh) rotate(45deg); }
+      to   { transform: translateY(-20vh) rotate(45deg); }
     }
 
     .wrap{
       width:min(760px, 92vw);
-      padding:26px;
-      border-radius:24px;
-      background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.08));
+      padding: 26px 26px 22px;
+      border-radius: 22px;
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 70px var(--shadow);
       border: 1px solid rgba(255,255,255,0.22);
-      box-shadow: 0 25px 80px var(--shadow);
-      backdrop-filter: blur(10px);
       position: relative;
       overflow:hidden;
     }
 
-    .badge{
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:8px 12px;
-      border-radius:999px;
-      background: rgba(0,0,0,0.18);
-      border: 1px solid rgba(255,255,255,0.22);
-      color: rgba(255,255,255,0.9);
-      font-weight:700;
-      letter-spacing:0.2px;
-      font-size:14px;
-      margin-bottom:12px;
+    .topRow{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
     }
 
     h1{
-      margin: 6px 0 6px;
-      font-size: clamp(28px, 4vw, 46px);
-      line-height:1.05;
-      letter-spacing: 0.3px;
+      margin:0;
+      font-size: clamp(26px, 3.6vw, 40px);
+      letter-spacing: 0.2px;
       text-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
-    p{
-      margin: 0 0 18px;
+
+    .subtitle{
+      margin: 6px 0 0;
       color: var(--muted);
-      font-size: 16px;
-      line-height: 1.55;
+      font-size: 15px;
+      line-height: 1.4;
     }
 
-    .arena{
-      margin-top: 14px;
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(0,0,0,0.12);
+      font-weight: 700;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .badge .dot{
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 0 18px rgba(255,255,255,0.65);
+    }
+
+    .stage{
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,0.18);
       position: relative;
-      height: 240px;
-      border-radius: 20px;
-      border: 1px dashed rgba(255,255,255,0.35);
-      background: linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.04));
+    }
+
+    .choiceArea{
+      position: relative;
+      height: 260px;
+      margin-top: 12px;
+      border-radius: 18px;
+      border: 2px dashed rgba(255,255,255,0.35);
+      background: rgba(0,0,0,0.10);
       overflow: hidden;
     }
 
-    /* "Danger circle" that No runs away from */
-    .dangerRing{
+    /* the "circle" (a soft glow region around No) */
+    .shyCircle{
       position:absolute;
-      left:50%;
-      top:52%;
-      width: 200px;
-      height: 200px;
+      width: 170px;
+      height: 170px;
+      border-radius: 999px;
+      left: 55%;
+      top: 40%;
       transform: translate(-50%, -50%);
-      border-radius: 999px;
-      border: 2px solid rgba(255,255,255,0.35);
-      box-shadow: inset 0 0 0 10px rgba(255,255,255,0.06),
-                  0 20px 50px rgba(0,0,0,0.20);
-      backdrop-filter: blur(4px);
-      pointer-events: none;
-    }
-
-    .hint{
-      position:absolute;
-      left:50%;
-      top:14px;
-      transform: translateX(-50%);
-      font-weight:700;
-      font-size: 14px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.16);
-      border: 1px solid rgba(255,255,255,0.18);
-      color: rgba(255,255,255,0.85);
+      background: radial-gradient(circle at center, rgba(255,255,255,0.22), rgba(255,255,255,0.05) 60%, transparent 70%);
+      border: 2px solid rgba(255,255,255,0.25);
+      box-shadow: 0 0 30px rgba(255,255,255,0.16);
       pointer-events:none;
     }
 
     .btn{
-      border:0;
-      padding: 14px 18px;
-      border-radius: 999px;
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 18px;
+      font-size: 18px;
       font-weight: 900;
-      font-size: 16px;
       cursor: pointer;
       user-select: none;
       transition: transform 120ms ease, filter 120ms ease;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.20);
     }
-    .btn:active{ transform: translateY(2px) scale(0.99); }
 
     #yesBtn{
-      background: linear-gradient(180deg, #8dffb0, var(--yes));
-      color:#053015;
+      background: var(--yes);
+      color: var(--yesText);
       position:absolute;
-      left: 50%;
-      bottom: 18px;
-      transform: translateX(-120%);
+      left: 18%;
+      top: 48%;
+      transform: translate(-50%, -50%);
     }
-    #yesBtn:hover{ filter: brightness(1.08); transform: translateX(-120%) translateY(-1px); }
+    #yesBtn:hover{ filter: brightness(1.08); transform: translate(-50%, -52%); }
+    #yesBtn:active{ transform: translate(-50%, -48%) scale(0.99); }
 
     #noBtn{
       position:absolute;
-      left: 50%;
-      top: 60%;
+      left: 70%;
+      top: 48%;
       transform: translate(-50%, -50%);
-      background: linear-gradient(180deg, #ff8a8a, var(--no));
-      color:#3a0505;
+      background: var(--no);
+      color: var(--noText);
       pointer-events: none; /* cannot be clicked */
     }
 
-    .sparkle{
+    .hint{
       position:absolute;
-      right: 18px;
-      bottom: 18px;
+      right: 14px;
+      top: 14px;
+      max-width: 240px;
       padding: 10px 12px;
       border-radius: 14px;
-      background: rgba(0,0,0,0.16);
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(0,0,0,0.14);
+      font-size: 14px;
+      color: rgba(255,255,255,0.90);
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 150ms ease, transform 150ms ease;
+      pointer-events:none;
+    }
+    .hint.show{
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .hint b{ font-weight: 900; }
+
+    .result{
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.14);
+    }
+    .resultTitle{
+      font-size: 20px;
+      font-weight: 950;
+      letter-spacing: 0.2px;
+    }
+    .resultText{
+      margin-top: 8px;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.5;
+      font-size: 16px;
+    }
+    .gif{
+      width: min(420px, 100%);
+      border-radius: 16px;
+      display:block;
+      margin-top: 12px;
+      border: 1px solid rgba(255,255,255,0.20);
+    }
+
+    .footerNote{
+      margin-top: 12px;
       font-size: 13px;
-      color: rgba(255,255,255,0.85);
+      color: rgba(255,255,255,0.70);
     }
 
     .hidden{ display:none !important; }
 
-    .result{
-      margin-top: 18px;
-      padding: 18px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.22);
-      background: rgba(0,0,0,0.14);
-    }
-    .result h2{
-      margin: 0 0 10px;
-      font-size: 22px;
-      letter-spacing: 0.2px;
-    }
-    .gif{
-      width: min(460px, 100%);
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.22);
-      display:block;
-      margin-top: 10px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-    }
-
-    .mini{
-      margin-top: 10px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.68);
+    @media (max-width: 520px){
+      .choiceArea{ height: 280px; }
+      #yesBtn{ left: 30%; }
+      #noBtn{ left: 70%; }
+      .hint{ right: 10px; left: 10px; max-width: none; }
     }
   </style>
 </head>
-<body>
 
-  <!-- floating hearts -->
-  <script>
-    (function makeHearts(){
-      const hearts = ["💖","💘","💝","💗","💕","❤️"];
-      const count = 18;
-      for(let i=0;i<count;i++){
-        const s = document.createElement("div");
-        s.className = "heart";
-        s.textContent = hearts[Math.floor(Math.random()*hearts.length)];
-        s.style.left = Math.random()*100 + "vw";
-        s.style.animationDuration = (6 + Math.random()*8) + "s";
-        s.style.animationDelay = (-Math.random()*10) + "s";
-        s.style.fontSize = (16 + Math.random()*22) + "px";
-        document.body.appendChild(s);
-      }
-    })();
-  </script>
+<body>
+  <!-- floating hearts (purely for fun) -->
+  <div class="heart" style="left:8%;  animation-duration:12s; animation-delay:-2s;"></div>
+  <div class="heart" style="left:18%; animation-duration:15s; animation-delay:-8s;"></div>
+  <div class="heart" style="left:34%; animation-duration:11s; animation-delay:-5s;"></div>
+  <div class="heart" style="left:52%; animation-duration:16s; animation-delay:-10s;"></div>
+  <div class="heart" style="left:68%; animation-duration:13s; animation-delay:-6s;"></div>
+  <div class="heart" style="left:82%; animation-duration:14s; animation-delay:-9s;"></div>
+  <div class="heart" style="left:92%; animation-duration:17s; animation-delay:-4s;"></div>
 
   <div class="wrap">
-    <div class="badge">💌 Valentine Mode</div>
-    <h1>Will you be my Valentine?</h1>
-    <p>Be honest. (But also… the <b>No</b> button is a little shy.)</p>
-
-    <div class="arena" id="arena">
-      <div class="hint">Try to click “No” 😈</div>
-      <div class="dangerRing" id="ring"></div>
-
-      <button id="yesBtn" class="btn" type="button">Yes 💘</button>
-      <button id="noBtn" class="btn" type="button" aria-hidden="true">No 🙃</button>
-
-      <div class="sparkle">✨ Tip: move your cursor around</div>
+    <div class="topRow">
+      <div>
+        <h1>Will you be my Valentine? 💘</h1>
+        <div class="subtitle">There are two choices. One of them is… a little shy.</div>
+      </div>
+      <div class="badge" title="Totally scientific measurement">
+        <span class="dot"></span>
+        No-button shyness: <span id="shyMeter">high</span>
+      </div>
     </div>
 
-    <div id="result" class="result hidden">
-      <h2 id="resultText">YAY!! 💖</h2>
-      <img id="resultGif" class="gif" alt="cute gif" src="" />
-      <div class="mini">Refresh to replay.</div>
+    <div class="stage">
+      <div style="font-weight:800; font-size:15px; color: rgba(255,255,255,0.9);">
+        Try to click “No” if you can 😏
+      </div>
+
+      <div class="choiceArea" id="choiceArea">
+        <div class="shyCircle" id="shyCircle"></div>
+        <div class="hint" id="hint">No seems shy! 🫣</div>
+
+        <button id="yesBtn" class="btn" type="button">Yes</button>
+        <button id="noBtn"  class="btn" type="button" aria-hidden="true">No</button>
+      </div>
+
+      <div id="result" class="result hidden">
+        <div class="resultTitle">Yessss!! 🎉💖</div>
+        <div class="resultText" id="resultText">
+          You just made my day. Happy Valentine’s! 💕
+        </div>
+        <img
+          id="resultGif"
+          class="gif"
+          alt="happy gif"
+          src=""
+        />
+        <div class="footerNote">Refresh to play again.</div>
+      </div>
     </div>
   </div>
 
   <script>
-    const arena = document.getElementById("arena");
-    const ring  = document.getElementById("ring");
-    const noBtn = document.getElementById("noBtn");
+    const choiceArea = document.getElementById("choiceArea");
+    const shyCircle = document.getElementById("shyCircle");
+    const hint = document.getElementById("hint");
+    const shyMeter = document.getElementById("shyMeter");
+
     const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
 
     const result = document.getElementById("result");
-    const resultText = document.getElementById("resultText");
     const resultGif = document.getElementById("resultGif");
 
-    // Swap this with any direct .gif URL you like
-    const GIF_URL = "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif";
+    // Pick any direct .gif URL you like:
+    const GIF_URL = "https://media.giphy.com/media/111ebonMs90YLu/giphy.gif";
 
-    // "No" physics
-    let noPos = { x: 0, y: 0 };      // current position in px (relative to arena)
-    let noVel = { x: 0, y: 0 };      // velocity
-    let target = { x: 0, y: 0 };     // desired position to flee toward
-    let pointer = { x: 0, y: 0 };    // pointer pos relative to arena
-    let hasPointer = false;
+    // For "No seems shy!" message timing
+    let hintTimeout = null;
 
-    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+    // Optional: track how many escapes happened
+    let escapes = 0;
 
-    function rectCenter(rect){
-      return { cx: rect.left + rect.width/2, cy: rect.top + rect.height/2 };
+    function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+
+    function showHint() {
+      hint.classList.add("show");
+      if (hintTimeout) clearTimeout(hintTimeout);
+      hintTimeout = setTimeout(() => hint.classList.remove("show"), 650);
     }
 
-    function initNoButton(){
-      const a = arena.getBoundingClientRect();
-      const b = noBtn.getBoundingClientRect();
-      // start somewhere near the center
-      noPos.x = (a.width - b.width)/2 + 80;
-      noPos.y = (a.height - b.height)/2;
-      noVel.x = 0; noVel.y = 0;
-      applyNoPos();
+    function updateMeter() {
+      // playful meter based on escapes
+      if (escapes < 3) shyMeter.textContent = "medium";
+      else if (escapes < 7) shyMeter.textContent = "high";
+      else shyMeter.textContent = "EXTREME";
     }
 
-    function applyNoPos(){
-      noBtn.style.left = noPos.x + "px";
-      noBtn.style.top  = noPos.y + "px";
-      noBtn.style.transform = "translate(0,0)";
+    function placeNoAt(x, y) {
+      const areaRect = choiceArea.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+
+      // Convert target x,y in viewport coords → coords inside choiceArea
+      const relX = x - areaRect.left;
+      const relY = y - areaRect.top;
+
+      // Constrain within bounds
+      const maxX = areaRect.width - noRect.width;
+      const maxY = areaRect.height - noRect.height;
+
+      const left = clamp(relX - noRect.width / 2, 0, maxX);
+      const top  = clamp(relY - noRect.height / 2, 0, maxY);
+
+      noBtn.style.left = `${left}px`;
+      noBtn.style.top  = `${top}px`;
     }
 
-    function updatePointer(e){
-      const a = arena.getBoundingClientRect();
-      pointer.x = e.clientX - a.left;
-      pointer.y = e.clientY - a.top;
-      hasPointer = true;
+    // We want No to keep running away from the "circle" AND the cursor.
+    function runNoAway(pointerX, pointerY) {
+      const areaRect = choiceArea.getBoundingClientRect();
+      const circleRect = shyCircle.getBoundingClientRect();
+      const noRect = noBtn.getBoundingClientRect();
+
+      // Centers
+      const cx = circleRect.left + circleRect.width / 2;
+      const cy = circleRect.top + circleRect.height / 2;
+      const nx = noRect.left + noRect.width / 2;
+      const ny = noRect.top + noRect.height / 2;
+
+      // Direction away from cursor
+      let dx1 = nx - pointerX;
+      let dy1 = ny - pointerY;
+      const len1 = Math.hypot(dx1, dy1) || 1;
+      dx1 /= len1; dy1 /= len1;
+
+      // Direction away from circle center (so it "runs away from the circle")
+      let dx2 = nx - cx;
+      let dy2 = ny - cy;
+      const len2 = Math.hypot(dx2, dy2) || 1;
+      dx2 /= len2; dy2 /= len2;
+
+      // Combine both directions (weighted)
+      let ux = dx1 * 0.7 + dx2 * 0.9;
+      let uy = dy1 * 0.7 + dy2 * 0.9;
+      const len = Math.hypot(ux, uy) || 1;
+      ux /= len; uy /= len;
+
+      // Step size and randomness for fun
+      const step = 170;
+      const jitterX = (Math.random() - 0.5) * 90;
+      const jitterY = (Math.random() - 0.5) * 70;
+
+      const targetX = nx + ux * step + jitterX;
+      const targetY = ny + uy * step + jitterY;
+
+      // Place within the area
+      const relTargetX = clamp(targetX, areaRect.left, areaRect.right);
+      const relTargetY = clamp(targetY, areaRect.top, areaRect.bottom);
+
+      placeNoAt(relTargetX, relTargetY);
+
+      escapes++;
+      updateMeter();
+      showHint();
     }
 
-    function computeFleeTarget(){
-      const a = arena.getBoundingClientRect();
-      const r = ring.getBoundingClientRect();
-      const b = noBtn.getBoundingClientRect();
-
-      // ring center relative to arena
-      const ringC = {
-        x: (r.left - a.left) + r.width/2,
-        y: (r.top  - a.top)  + r.height/2
-      };
-
-      // no center relative to arena
-      const noC = {
-        x: noPos.x + b.width/2,
-        y: noPos.y + b.height/2
-      };
-
-      // If we don't have pointer yet, gently orbit away from ring center
-      const px = hasPointer ? pointer.x : ringC.x + 1;
-      const py = hasPointer ? pointer.y : ringC.y + 1;
-
-      // Repel from pointer strongly, and from ring moderately
-      const dxP = noC.x - px;
-      const dyP = noC.y - py;
-      const distP = Math.max(1, Math.hypot(dxP, dyP));
-
-      const dxR = noC.x - ringC.x;
-      const dyR = noC.y - ringC.y;
-      const distR = Math.max(1, Math.hypot(dxR, dyR));
-
-      // Strength factors
-      const repelPointer = 9000 / (distP * distP);  // strong close-up repulsion
-      const repelRing    = 2500 / (distR * distR);  // keeps it away from the circle
-
-      // Combine forces
-      const fx = (dxP / distP) * repelPointer + (dxR / distR) * repelRing;
-      const fy = (dyP / distP) * repelPointer + (dyR / distR) * repelRing;
-
-      // Proposed target position
-      let tx = noPos.x + fx * 18;
-      let ty = noPos.y + fy * 18;
-
-      // Add randomness so it's unpredictable
-      tx += (Math.random() - 0.5) * 18;
-      ty += (Math.random() - 0.5) * 14;
-
-      // Keep inside arena bounds
-      const maxX = a.width  - b.width;
-      const maxY = a.height - b.height;
-
-      // Also keep it away from the bottom (so it doesn't overlap Yes too much)
-      const safeBottom = maxY - 68;
-
-      tx = clamp(tx, 8, maxX - 8);
-      ty = clamp(ty, 18, safeBottom);
-
-      target.x = tx;
-      target.y = ty;
+    // "Catch radius" around No (if cursor gets near, it flees)
+    function distanceToNo(pointerX, pointerY) {
+      const r = noBtn.getBoundingClientRect();
+      const nx = r.left + r.width / 2;
+      const ny = r.top + r.height / 2;
+      return Math.hypot(pointerX - nx, pointerY - ny);
     }
 
-    function tick(){
-      // Find where it should run
-      computeFleeTarget();
-
-      // Smoothly move toward the target (spring-ish movement)
-      const ax = (target.x - noPos.x) * 0.12;
-      const ay = (target.y - noPos.y) * 0.12;
-
-      noVel.x = (noVel.x + ax) * 0.78;
-      noVel.y = (noVel.y + ay) * 0.78;
-
-      noPos.x += noVel.x;
-      noPos.y += noVel.y;
-
-      applyNoPos();
-      requestAnimationFrame(tick);
-    }
-
-    arena.addEventListener("pointermove", updatePointer);
-    arena.addEventListener("pointerdown", updatePointer);
-
-    yesBtn.addEventListener("click", () => {
-      resultText.textContent = "YAYYY!! 💖💖 See you on Valentine’s 😌";
-      resultGif.src = GIF_URL;
-
-      arena.classList.add("hidden");
-      result.classList.remove("hidden");
+    // On pointer movement inside area, make No flee when user gets close
+    choiceArea.addEventListener("pointermove", (e) => {
+      const d = distanceToNo(e.clientX, e.clientY);
+      if (d < 140) runNoAway(e.clientX, e.clientY);
     });
 
-    window.addEventListener("resize", initNoButton);
+    // On tap/click inside area (mobile), make it flee too
+    choiceArea.addEventListener("pointerdown", (e) => {
+      const d = distanceToNo(e.clientX, e.clientY);
+      if (d < 220) runNoAway(e.clientX, e.clientY);
+    });
 
-    initNoButton();
-    requestAnimationFrame(tick);
+    // Initial placement (in case layout shifts)
+    window.addEventListener("load", () => {
+      // Place No near the circle at first
+      const c = shyCircle.getBoundingClientRect();
+      placeNoAt(c.left + c.width/2, c.top + c.height/2);
+    });
+
+    // YES click: show GIF and hide the area
+    yesBtn.addEventListener("click", () => {
+      resultGif.src = GIF_URL;
+      choiceArea.classList.add("hidden");
+      result.classList.remove("hidden");
+    });
   </script>
 </body>
 </html>
-
