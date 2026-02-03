@@ -6,18 +6,20 @@
   <title>Valentine?</title>
   <style>
     :root{
-      --bg1:#ff4d6d;
-      --bg2:#7b2ff7;
-      --card: rgba(255,255,255,0.14);
+      /* 🎨 Background colors (edit these to experiment) */
+      --bg1:#ff77b7;   /* pink */
+      --bg2:#b84bff;   /* purple */
+      --bg3:#ffcfdf;   /* light blush */
+
+      --card: rgba(255,255,255,0.16);
       --text: rgba(255,255,255,0.95);
-      --muted: rgba(255,255,255,0.75);
+      --muted: rgba(255,255,255,0.78);
       --yes:#22c55e;
       --no:#ff3b3b;
       --shadow: rgba(0,0,0,0.25);
     }
 
     *{ box-sizing:border-box; }
-
     body{
       margin:0;
       min-height:100vh;
@@ -26,22 +28,23 @@
       font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       color:var(--text);
       overflow:hidden;
+
+      /* 💗 Softer “cute” background */
       background:
-        radial-gradient(900px 500px at 20% 20%, rgba(255,255,255,0.25), transparent 60%),
-        radial-gradient(900px 500px at 80% 70%, rgba(255,255,255,0.18), transparent 60%),
-        linear-gradient(135deg, var(--bg1), var(--bg2));
+        radial-gradient(900px 500px at 18% 18%, rgba(255,255,255,0.28), transparent 60%),
+        radial-gradient(900px 500px at 82% 72%, rgba(255,255,255,0.18), transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2) 55%, var(--bg3));
     }
 
-    /* floating hearts */
+    /* Floating hearts background */
     .heart {
       position: absolute;
-      font-size: 20px;
-      opacity: 0.35;
+      opacity: 0.38;
       animation: floatUp linear infinite;
       user-select: none;
       pointer-events: none;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.22));
     }
-
     @keyframes floatUp {
       from { transform: translateY(120vh) rotate(0deg); }
       to   { transform: translateY(-20vh) rotate(360deg); }
@@ -51,30 +54,66 @@
       width:min(760px, 92vw);
       padding:26px;
       border-radius:24px;
-      background: var(--card);
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.08));
       border: 1px solid rgba(255,255,255,0.22);
       box-shadow: 0 25px 80px var(--shadow);
       backdrop-filter: blur(10px);
+      position: relative;
+      overflow:hidden;
+    }
+
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.9);
+      font-weight:800;
+      letter-spacing:0.2px;
+      font-size:14px;
+      margin-bottom:12px;
     }
 
     h1{
-      margin: 6px 0;
+      margin: 6px 0 6px;
       font-size: clamp(28px, 4vw, 46px);
+      line-height:1.05;
+      letter-spacing: 0.3px;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
-
     p{
       margin: 0 0 18px;
       color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
     }
 
     .arena{
       margin-top: 14px;
       position: relative;
-      height: 220px;
+      height: 240px;
       border-radius: 20px;
       border: 1px dashed rgba(255,255,255,0.35);
-      background: rgba(0,0,0,0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.06));
       overflow: hidden;
+    }
+
+    .hint{
+      position:absolute;
+      left:50%;
+      top:14px;
+      transform: translateX(-50%);
+      font-weight:800;
+      font-size: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.16);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.88);
+      pointer-events:none;
     }
 
     .btn{
@@ -85,25 +124,41 @@
       font-size: 16px;
       cursor: pointer;
       user-select: none;
+      transition: transform 120ms ease, filter 120ms ease;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
     }
+    .btn:active{ transform: translateY(2px) scale(0.99); }
 
     #yesBtn{
-      background: #22c55e;
+      background: linear-gradient(180deg, #b7ffd0, #22c55e);
       color:#053015;
       position:absolute;
-      left: 40%;
+      left: 50%;
       bottom: 18px;
+      transform: translateX(-120%);
     }
+    #yesBtn:hover{ filter: brightness(1.08); transform: translateX(-120%) translateY(-1px); }
 
     #noBtn{
       position:absolute;
-      left: 50%;
-      top: 50%;
-      background: #ff3b3b;
+      left: 55%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(180deg, #ff9aa5, #ff3b3b);
       color:#3a0505;
+      pointer-events: none; /* can't be clicked */
+    }
 
-      /* THE IMPORTANT PART — cannot be clicked */
-      pointer-events: none;
+    .sparkle{
+      position:absolute;
+      right: 18px;
+      bottom: 18px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,0.16);
+      border: 1px solid rgba(255,255,255,0.18);
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
     }
 
     .hidden{ display:none !important; }
@@ -112,107 +167,190 @@
       margin-top: 18px;
       padding: 18px;
       border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.22);
       background: rgba(0,0,0,0.14);
     }
-
-    .gif{
-      width: min(420px, 100%);
-      border-radius: 16px;
-      margin-top: 10px;
+    .result h2{
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: 0.2px;
     }
-
+    .gif{
+      width: min(460px, 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.22);
+      display:block;
+      margin-top: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    .mini{
+      margin-top: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.68);
+    }
   </style>
 </head>
-
 <body>
 
-<script>
-// create hearts
-(function(){
-  const hearts = ["💖","💘","💝","💗","💕","❤️"];
-  for(let i=0;i<18;i++){
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
-    h.style.left = Math.random()*100 + "vw";
-    h.style.animationDuration = (6 + Math.random()*8) + "s";
-    document.body.appendChild(h);
-  }
-})();
-</script>
+  <!-- floating hearts -->
+  <script>
+    (function makeHearts(){
+      const hearts = ["💖","💘","💝","💗","💕","❤️"];
+      const count = 26; // ✅ increased a little (was 18)
+      for(let i=0;i<count;i++){
+        const s = document.createElement("div");
+        s.className = "heart";
+        s.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+        s.style.left = Math.random()*100 + "vw";
+        s.style.animationDuration = (6 + Math.random()*8) + "s";
+        s.style.animationDelay = (-Math.random()*10) + "s";
+        s.style.fontSize = (16 + Math.random()*22) + "px";
+        document.body.appendChild(s);
+      }
+    })();
+  </script>
 
-<div class="wrap">
-  <h1>Will you be my Valentine?</h1>
-  <p>The No button is a little shy…</p>
+  <div class="wrap">
+    <div class="badge">💌 Valentine Mode</div>
+    <h1>Will you be my Valentine?</h1>
+    <p>Be honest. (But also… the <b>No</b> button is kinda scared.)</p>
 
-  <div class="arena" id="arena">
-    <button id="yesBtn" class="btn">Yes 💘</button>
-    <button id="noBtn" class="btn">No 🙃</button>
+    <div class="arena" id="arena">
+      <div class="hint">Try to click “No” 😈</div>
+
+      <button id="yesBtn" class="btn" type="button">Yes 💘</button>
+      <button id="noBtn" class="btn" type="button" aria-hidden="true">No 🙃</button>
+
+      <div class="sparkle">✨ Tip: chase it</div>
+    </div>
+
+    <div id="result" class="result hidden">
+      <h2 id="resultText">YAY!! 💖</h2>
+      <img id="resultGif" class="gif" alt="cute gif" src="" />
+      <div class="mini">Refresh to replay.</div>
+    </div>
   </div>
 
-  <div id="result" class="result hidden">
-    <h2>YAYYY!! 💖</h2>
-    <img id="gif" class="gif"
-         src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" />
-  </div>
-</div>
+  <script>
+    const arena = document.getElementById("arena");
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
 
-<script>
-const arena = document.getElementById("arena");
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
-const result = document.getElementById("result");
+    const result = document.getElementById("result");
+    const resultText = document.getElementById("resultText");
+    const resultGif = document.getElementById("resultGif");
 
-let pos = {x: 200, y: 80};
-let vel = {x: 0, y: 0};
+    // Swap this with any direct .gif URL you like
+    const GIF_URL = "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif";
 
-function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
+    // "No" motion variables
+    let noPos = { x: 0, y: 0 };
+    let noVel = { x: 0, y: 0 };
+    let target = { x: 0, y: 0 };
+    let pointer = { x: 0, y: 0 };
+    let hasPointer = false;
 
-function moveAway(pointerX, pointerY){
-  const rect = arena.getBoundingClientRect();
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
-  const dx = pos.x - pointerX;
-  const dy = pos.y - pointerY;
+    function initNoButton(){
+      const a = arena.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
 
-  const dist = Math.hypot(dx,dy) || 1;
+      // Start around the middle-ish
+      noPos.x = (a.width - b.width)/2 + 60;
+      noPos.y = (a.height - b.height)/2;
+      noVel.x = 0; noVel.y = 0;
+      applyNoPos();
+    }
 
-  const force = 6000 / (dist*dist);
+    function applyNoPos(){
+      noBtn.style.left = noPos.x + "px";
+      noBtn.style.top  = noPos.y + "px";
+      noBtn.style.transform = "translate(0,0)";
+    }
 
-  vel.x += (dx/dist) * force;
-  vel.y += (dy/dist) * force;
-}
+    function updatePointer(e){
+      const a = arena.getBoundingClientRect();
+      pointer.x = e.clientX - a.left;
+      pointer.y = e.clientY - a.top;
+      hasPointer = true;
+    }
 
-arena.addEventListener("pointermove", e=>{
-  moveAway(e.clientX - arena.getBoundingClientRect().left,
-           e.clientY - arena.getBoundingClientRect().top);
-});
+    function computeFleeTarget(){
+      const a = arena.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
 
-function tick(){
-  vel.x *= 0.8;
-  vel.y *= 0.8;
+      const noC = {
+        x: noPos.x + b.width/2,
+        y: noPos.y + b.height/2
+      };
 
-  pos.x += vel.x;
-  pos.y += vel.y;
+      // If no pointer yet, drift randomly
+      const px = hasPointer ? pointer.x : (a.width/2 + 1);
+      const py = hasPointer ? pointer.y : (a.height/2 + 1);
 
-  const maxX = arena.clientWidth - 80;
-  const maxY = arena.clientHeight - 40;
+      // Repel strongly from pointer
+      const dx = noC.x - px;
+      const dy = noC.y - py;
+      const dist = Math.max(1, Math.hypot(dx, dy));
 
-  pos.x = clamp(pos.x, 10, maxX);
-  pos.y = clamp(pos.y, 10, maxY);
+      const repel = 11000 / (dist * dist); // strong close-up repulsion
+      const fx = (dx / dist) * repel;
+      const fy = (dy / dist) * repel;
 
-  noBtn.style.left = pos.x + "px";
-  noBtn.style.top  = pos.y + "px";
+      // Proposed target
+      let tx = noPos.x + fx * 18;
+      let ty = noPos.y + fy * 18;
 
-  requestAnimationFrame(tick);
-}
+      // Randomness so it's unpredictable
+      tx += (Math.random() - 0.5) * 22;
+      ty += (Math.random() - 0.5) * 16;
 
-yesBtn.addEventListener("click", ()=>{
-  arena.classList.add("hidden");
-  result.classList.remove("hidden");
-});
+      const maxX = a.width  - b.width;
+      const maxY = a.height - b.height;
 
-tick();
-</script>
+      // Keep it away from the bottom (so it doesn't overlap Yes too much)
+      const safeBottom = maxY - 68;
 
+      tx = clamp(tx, 10, maxX - 10);
+      ty = clamp(ty, 18, safeBottom);
+
+      target.x = tx;
+      target.y = ty;
+    }
+
+    function tick(){
+      computeFleeTarget();
+
+      // spring-ish smoothing
+      const ax = (target.x - noPos.x) * 0.14;
+      const ay = (target.y - noPos.y) * 0.14;
+
+      noVel.x = (noVel.x + ax) * 0.78;
+      noVel.y = (noVel.y + ay) * 0.78;
+
+      noPos.x += noVel.x;
+      noPos.y += noVel.y;
+
+      applyNoPos();
+      requestAnimationFrame(tick);
+    }
+
+    arena.addEventListener("pointermove", updatePointer);
+    arena.addEventListener("pointerdown", updatePointer);
+
+    yesBtn.addEventListener("click", () => {
+      resultText.textContent = "YAYYY!! 💖💖 See you on Valentine’s 😌";
+      resultGif.src = GIF_URL;
+
+      arena.classList.add("hidden");
+      result.classList.remove("hidden");
+    });
+
+    window.addEventListener("resize", initNoButton);
+
+    initNoButton();
+    requestAnimationFrame(tick);
+  </script>
 </body>
 </html>
