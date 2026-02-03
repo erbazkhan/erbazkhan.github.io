@@ -1,55 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Valentine?</title>
+
+  <style>
+    :root{
+      /* --- Play with these 3 colors --- */
+      --bg1:#ff77b7;
+      --bg2:#b84bff;
+      --bg3:#ffcfdf;
+
+      --card: rgba(255,255,255,0.16);
+      --text: rgba(255,255,255,0.95);
+      --muted: rgba(255,255,255,0.78);
+      --yes:#22c55e;
+      --no:#ff3b3b;
+      --shadow: rgba(0,0,0,0.25);
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color:var(--text);
+      overflow:hidden;
+
+      background:
+        radial-gradient(900px 500px at 18% 18%, rgba(255,255,255,0.28), transparent 60%),
+        radial-gradient(900px 500px at 82% 72%, rgba(255,255,255,0.18), transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+    }
+
+    /* hearts */
+    .heart {
+      position: absolute;
+      opacity: 0.38;
+      animation: floatUp linear infinite;
+      user-select: none;
+      pointer-events: none;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.22));
+    }
+    @keyframes floatUp {
+      from { transform: translateY(120vh) rotate(0deg); }
+      to   { transform: translateY(-20vh) rotate(360deg); }
+    }
+
+    .wrap{
+      width:min(760px, 92vw);
+      padding:26px;
+      border-radius:24px;
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 25px 80px var(--shadow);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 2;
+      text-align: left;
+    }
+
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.22);
+      font-weight:800;
+      font-size:14px;
+      margin-bottom:12px;
+    }
+
+    h1{
+      margin: 6px 0 8px;
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.05;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    p{
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .btn{
+      border:0;
+      padding: 14px 18px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 120ms ease, filter 120ms ease;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
+      user-select: none;
+    }
+    .btn:active{ transform: translateY(2px) scale(0.99); }
+
+    #yesBtn{
+      background: linear-gradient(180deg, #b7ffd0, #22c55e);
+      color:#053015;
+    }
+    #yesBtn:hover{ filter: brightness(1.07); transform: translateY(-1px); }
+
+    /* No escapes across whole page */
+    #noBtn{
+      position: fixed;
+      left: 62vw;
+      top: 58vh;
+      background: linear-gradient(180deg, #ff9aa5, #ff3b3b);
+      color:#3a0505;
+      pointer-events: none; /* cannot be clicked */
+      z-index: 999;
+      will-change: left, top;
+    }
+
+    .result{
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(0,0,0,0.14);
+      display:none;
+    }
+
+    .gif{
+      width: min(460px, 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.22);
+      margin-top: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      display:block;
+    }
+  </style>
+</head>
+
+<body>
+
+<script>
+/* hearts */
+(function(){
+  const hearts = ["💖","💘","💝","💗","💕","❤️"];
+  const count = 28;
+  for(let i=0;i<count;i++){
+    const h = document.createElement("div");
+    h.className="heart";
+    h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+    h.style.left = Math.random()*100 + "vw";
+    h.style.animationDuration = (6 + Math.random()*8) + "s";
+    h.style.animationDelay = (-Math.random()*10) + "s";
+    h.style.fontSize = (16 + Math.random()*22) + "px";
+    document.body.appendChild(h);
+  }
+})();
+</script>
+
+<div class="wrap">
+  <div class="badge">💌 Valentine Mode</div>
+
+  <h1>Will you be my Valentine?</h1>
+  <p>Be honest. (But also… the <b>No</b> button is kinda shy!)</p>
+
+  <button id="yesBtn" class="btn">Yes 💘</button>
+
+  <div id="result" class="result">
+    <div style="font-weight:900; font-size:22px;">YAYYY!! 💖💖</div>
+    <img
+      class="gif"
+      alt="cute gif"
+      src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"
+    />
+    <div style="margin-top:10px; color:rgba(255,255,255,0.70); font-size:13px;">
+      Refresh to replay.
+    </div>
+  </div>
+</div>
+
+<button id="noBtn" class="btn" aria-hidden="true">No 🙃</button>
+
 <script>
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const result = document.getElementById("result");
 
-let pointer = {x:0, y:0};
-let isNear = false;
+let pointer = { x: -9999, y: -9999 };
+let running = false;
 
-// Track mouse position
-document.addEventListener("pointermove", e=>{
+// ✅ Tuning knobs (change these if you want)
+const DANGER_RADIUS = 140;   // how close you must get before No runs
+const ESCAPE_STEP   = 220;   // how far it jumps away when triggered
+
+document.addEventListener("pointermove", (e) => {
   pointer.x = e.clientX;
   pointer.y = e.clientY;
+
+  // Only run if cursor is close
+  if (!running && isPointerTooClose()) {
+    running = true;
+    requestAnimationFrame(runAwayLoop);
+  }
 });
 
-function flee(){
-  const rect = noBtn.getBoundingClientRect();
+document.addEventListener("pointerdown", (e) => {
+  pointer.x = e.clientX;
+  pointer.y = e.clientY;
 
-  const cx = rect.left + rect.width/2;
-  const cy = rect.top + rect.height/2;
-
-  const dx = cx - pointer.x;
-  const dy = cy - pointer.y;
-
-  const dist = Math.hypot(dx, dy);
-
-  // 👉 ONLY run away if cursor is close (120px bubble)
-  if(dist < 120){
-    isNear = true;
-
-    const force = 12000 / (dist*dist + 1);
-
-    let nx = rect.left + (dx/dist) * force + (Math.random()-0.5)*30;
-    let ny = rect.top  + (dy/dist) * force + (Math.random()-0.5)*30;
-
-    // keep inside screen
-    nx = Math.max(10, Math.min(window.innerWidth-120, nx));
-    ny = Math.max(10, Math.min(window.innerHeight-60, ny));
-
-    noBtn.style.left = nx + "px";
-    noBtn.style.top  = ny + "px";
-
-  } else {
-    // 👉 If far away → stay calm
-    isNear = false;
+  // On tap/click, also trigger if close
+  if (!running && isPointerTooClose()) {
+    running = true;
+    requestAnimationFrame(runAwayLoop);
   }
+});
 
-  requestAnimationFrame(flee);
+function isPointerTooClose(){
+  const r = noBtn.getBoundingClientRect();
+  const cx = r.left + r.width/2;
+  const cy = r.top  + r.height/2;
+  const dist = Math.hypot(cx - pointer.x, cy - pointer.y);
+  return dist < DANGER_RADIUS;
 }
 
-flee();
+function runAwayOnce(){
+  const r = noBtn.getBoundingClientRect();
+  const cx = r.left + r.width/2;
+  const cy = r.top  + r.height/2;
 
-yesBtn.addEventListener("click", ()=>{
-  result.style.display="block";
+  // direction away from cursor
+  let dx = cx - pointer.x;
+  let dy = cy - pointer.y;
+
+  // if somehow exactly on top, pick random direction
+  const len = Math.hypot(dx, dy) || 1;
+  dx /= len; dy /= len;
+
+  // Proposed new position
+  let nx = r.left + dx * ESCAPE_STEP;
+  let ny = r.top  + dy * ESCAPE_STEP;
+
+  // tiny randomness so it feels playful, not jittery
+  nx += (Math.random() - 0.5) * 30;
+  ny += (Math.random() - 0.5) * 24;
+
+  // Keep inside viewport
+  const margin = 10;
+  const maxX = window.innerWidth  - r.width  - margin;
+  const maxY = window.innerHeight - r.height - margin;
+
+  nx = Math.max(margin, Math.min(maxX, nx));
+  ny = Math.max(margin, Math.min(maxY, ny));
+
+  noBtn.style.left = nx + "px";
+  noBtn.style.top  = ny + "px";
+}
+
+function runAwayLoop(){
+  // If still close, jump away again; otherwise stop (no jitter)
+  if (isPointerTooClose()) {
+    runAwayOnce();
+    requestAnimationFrame(runAwayLoop);
+  } else {
+    running = false;
+  }
+}
+
+// Show result on Yes
+yesBtn.addEventListener("click", () => {
+  result.style.display = "block";
+  yesBtn.disabled = true;
+  yesBtn.style.filter = "brightness(0.92)";
+  yesBtn.style.cursor = "default";
 });
 </script>
+
+</body>
+</html>
