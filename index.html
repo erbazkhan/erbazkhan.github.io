@@ -1,169 +1,12 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Valentine?</title>
-
-  <style>
-    :root{
-      /* --- Play with these 3 colors --- */
-      --bg1:#ff77b7;
-      --bg2:#b84bff;
-      --bg3:#ffcfdf;
-
-      --card: rgba(255,255,255,0.16);
-      --text: rgba(255,255,255,0.95);
-      --muted: rgba(255,255,255,0.78);
-      --yes:#22c55e;
-      --no:#ff3b3b;
-      --shadow: rgba(0,0,0,0.25);
-    }
-
-    *{ box-sizing:border-box; }
-
-    body{
-      margin:0;
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      font-family: ui-rounded, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      color:var(--text);
-      overflow:hidden;
-
-      background:
-        radial-gradient(900px 500px at 18% 18%, rgba(255,255,255,0.28), transparent 60%),
-        radial-gradient(900px 500px at 82% 72%, rgba(255,255,255,0.18), transparent 60%),
-        linear-gradient(135deg, var(--bg1), var(--bg2) 55%, var(--bg3));
-    }
-
-    /* hearts */
-    .heart {
-      position: absolute;
-      opacity: 0.38;
-      animation: floatUp linear infinite;
-      user-select: none;
-      pointer-events: none;
-    }
-    @keyframes floatUp {
-      from { transform: translateY(120vh) rotate(0deg); }
-      to   { transform: translateY(-20vh) rotate(360deg); }
-    }
-
-    .wrap{
-      width:min(760px, 92vw);
-      padding:26px;
-      border-radius:24px;
-      background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.08));
-      border: 1px solid rgba(255,255,255,0.22);
-      box-shadow: 0 25px 80px var(--shadow);
-      backdrop-filter: blur(10px);
-      position: relative;
-      z-index: 2;
-    }
-
-    .badge{
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      padding:8px 12px;
-      border-radius:999px;
-      background: rgba(0,0,0,0.18);
-      font-weight:800;
-      font-size:14px;
-      margin-bottom:12px;
-    }
-
-    h1{
-      margin: 6px 0;
-      font-size: clamp(28px, 4vw, 46px);
-    }
-
-    .btn{
-      border:0;
-      padding: 14px 18px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 16px;
-      cursor: pointer;
-      transition: transform 120ms ease;
-    }
-
-    #yesBtn{
-      background: linear-gradient(180deg, #b7ffd0, #22c55e);
-      color:#053015;
-    }
-
-    /* 👇 THIS IS THE MAGIC PART */
-    #noBtn{
-      position: fixed;          /* whole page movement */
-      left: 60%;
-      top: 60%;
-      background: linear-gradient(180deg, #ff9aa5, #ff3b3b);
-      color:#3a0505;
-      pointer-events: none;     /* cannot be clicked */
-      z-index: 999;
-    }
-
-    .result{
-      margin-top: 18px;
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(0,0,0,0.14);
-      display:none;
-    }
-
-    .gif{
-      width: min(460px, 100%);
-      border-radius: 16px;
-      margin-top: 10px;
-    }
-  </style>
-</head>
-
-<body>
-
-<!-- hearts -->
-<script>
-(function(){
-  const hearts = ["💖","💘","💝","💗","💕","❤️"];
-  const count = 28;
-
-  for(let i=0;i<count;i++){
-    const h = document.createElement("div");
-    h.className="heart";
-    h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
-    h.style.left = Math.random()*100 + "vw";
-    h.style.animationDuration = (6 + Math.random()*8) + "s";
-    h.style.fontSize = (16 + Math.random()*22) + "px";
-    document.body.appendChild(h);
-  }
-})();
-</script>
-
-<div class="wrap">
-  <div class="badge">💌 Valentine Mode</div>
-
-  <h1>Will you be my Valentine?</h1>
-
-  <button id="yesBtn" class="btn">Yes 💘</button>
-</div>
-
-<button id="noBtn" class="btn">No 🙃</button>
-
-<div id="result" class="result">
-  <h2>YAYYY!! 💖💖</h2>
-  <img class="gif"
-       src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif">
-</div>
-
 <script>
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const result = document.getElementById("result");
 
 let pointer = {x:0, y:0};
+let isNear = false;
 
+// Track mouse position
 document.addEventListener("pointermove", e=>{
   pointer.x = e.clientX;
   pointer.y = e.clientY;
@@ -178,19 +21,28 @@ function flee(){
   const dx = cx - pointer.x;
   const dy = cy - pointer.y;
 
-  const dist = Math.max(1, Math.hypot(dx, dy));
+  const dist = Math.hypot(dx, dy);
 
-  const force = 12000 / (dist*dist);
+  // 👉 ONLY run away if cursor is close (120px bubble)
+  if(dist < 120){
+    isNear = true;
 
-  let nx = rect.left + (dx/dist) * force + (Math.random()-0.5)*40;
-  let ny = rect.top  + (dy/dist) * force + (Math.random()-0.5)*40;
+    const force = 12000 / (dist*dist + 1);
 
-  // keep inside screen
-  nx = Math.max(10, Math.min(window.innerWidth-120, nx));
-  ny = Math.max(10, Math.min(window.innerHeight-60, ny));
+    let nx = rect.left + (dx/dist) * force + (Math.random()-0.5)*30;
+    let ny = rect.top  + (dy/dist) * force + (Math.random()-0.5)*30;
 
-  noBtn.style.left = nx + "px";
-  noBtn.style.top  = ny + "px";
+    // keep inside screen
+    nx = Math.max(10, Math.min(window.innerWidth-120, nx));
+    ny = Math.max(10, Math.min(window.innerHeight-60, ny));
+
+    noBtn.style.left = nx + "px";
+    noBtn.style.top  = ny + "px";
+
+  } else {
+    // 👉 If far away → stay calm
+    isNear = false;
+  }
 
   requestAnimationFrame(flee);
 }
@@ -201,6 +53,3 @@ yesBtn.addEventListener("click", ()=>{
   result.style.display="block";
 });
 </script>
-
-</body>
-</html>
